@@ -48,7 +48,7 @@ function getUerInfo() {
 // 渲染用户头像
 function randerAvatar(user) {
     // 1.data中有登录的名称和昵称，判断哪个没有就选另一个
-    var name = user.username || user.nickname
+    var name = user.nickname || user.userkname
     // 2.设置欢迎文本
     $('.welcome').html('欢迎&nbsp&nbsp' + name)
     // 3.按需获取用户头像
