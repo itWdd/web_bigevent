@@ -41,7 +41,7 @@ $(function () {
             // 快速获取表单内容
             data: $(this).serialize(),
             success: function (res) {
-                if(res.status !== 0){
+                if (res.status !== 0) {
                     return layer.msg('添加失败')
                 }
                 initArtCateList()
@@ -54,33 +54,33 @@ $(function () {
 
     // 代理绑定“编辑按钮”
     var indexEdit = null
-    $('tbody').on('click','.btn-edit',function(){
+    $('tbody').on('click', '.btn-edit', function () {
         indexEdit = layer.open({
-            type:1,
+            type: 1,
             area: ['500px', '250px'],
             title: '编辑文章分类',
             content: $('#dialog-edit').html()
         })
         var id = $(this).attr('data-id')
         $.ajax({
-            method:'GET',
-            url:'/my/article/cates/' + id,
-            success:function(res){
+            method: 'GET',
+            url: '/my/article/cates/' + id,
+            success: function (res) {
                 // 填充表单
-                form.val('edit-form',res.data)
+                form.val('edit-form', res.data)
             }
         })
     })
 
     // 修改按钮的点击事件
-    $('body').on('submit','#edit-form',function(e){
+    $('body').on('submit', '#edit-form', function (e) {
         e.preventDefault()
         $.ajax({
-            method:'POST',
-            url:'/my/article/updatecate',
-            data:$(this).serialize(),
-            success:function(res){
-                if(res.status !== 0){
+            method: 'POST',
+            url: '/my/article/updatecate',
+            data: $(this).serialize(),
+            success: function (res) {
+                if (res.status !== 0) {
                     return layer.msg('修改成功')
                 }
                 layer.msg('修改成功')
@@ -88,5 +88,25 @@ $(function () {
                 initArtCateList()
             }
         })
+    })
+
+    // 通过代理方式，绑定删除按钮
+    $('body').on('click', '.btn-delete', function () {
+        var id = $(this).attr('data-id')
+        // 提示用户是否删除
+        layer.confirm('确认删除?', { icon: 3, title: '提示' }, function (index) {
+            $.ajax({
+                method:'GET',
+                url:'/my/article/deletecate/' + id,
+                success:function(res){
+                    if(res.status !== 0){
+                        return layer.msg('删除失败')
+                    }
+                    layer.msg('删除成功')
+                    initArtCateList()
+                    layer.close(index);
+                }
+            })
+        });
     })
 })
